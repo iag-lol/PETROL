@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petrol App</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 90%;
+            max-width: 600px;
+            margin: 20px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        form label {
+            font-weight: bold;
+            color: #495057;
+            display: flex;
+            flex-direction: column;
+        }
+
+        form input, form select, form button {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+
+        form input:focus, form select:focus, form button:focus {
+            border-color: #80bdff;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .actions button {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .actions button.add { background-color: #28a745; color: white; }
+        .actions button.add:hover { background-color: #218838; }
+
+        .actions button.search { background-color: #17a2b8; color: white; }
+        .actions button.search:hover { background-color: #138496; }
+
+        .actions button.modify { background-color: #ffc107; color: white; }
+        .actions button.modify:hover { background-color: #e0a800; }
+
+        .actions button.clear { background-color: #dc3545; color: white; }
+        .actions button.clear:hover { background-color: #c82333; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #dee2e6;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        td {
+            background-color: #f8f9fa;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(-20px);
+        }
+
+        .alert.error {
+            background-color: #dc3545;
+        }
+
+        .alert.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .radio-inputs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 350px;
+            margin-bottom: 20px;
+            user-select: none;
+        }
+
+        .radio-inputs > * {
+            margin: 6px;
+        }
+
+        .radio-input:checked + .radio-tile {
+            border-color: #2260ff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            color: #2260ff;
+        }
+
+        .radio-input:checked + .radio-tile:before {
+            transform: scale(1);
+            opacity: 1;
+            background-color: #2260ff;
+            border-color: #2260ff;
+        }
+
+        .radio-input:checked + .radio-tile .radio-icon svg {
+            fill: #2260ff;
+        }
+
+        .radio-input:checked + .radio-tile .radio-label {
+            color: #2260ff;
+        }
+
+        .radio-input:focus + .radio-tile {
+            border-color: #2260ff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
+        }
+
+        .radio-input:focus + .radio-tile:before {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .radio-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            min-height: 80px;
+            border-radius: 0.5rem;
+            border: 2px solid #b5bfd9;
+            background-color: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.15s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .radio-tile:before {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 0.75rem;
+            height: 0.75rem;
+            border: 2px solid #b5bfd9;
+            background-color: #fff;
+            border-radius: 50%;
+            top: 0.25rem;
+            left: 0.25rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: 0.25s ease;
+        }
+
+        .radio-tile:hover {
+            border-color: #2260ff;
+        }
+
+        .radio-tile:hover:before {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .radio-icon svg {
+            width: 2rem;
+            height: 2rem;
+            fill: #494949;
+        }
+
+        .radio-label {
+            color: #707070;
+            transition: 0.375s ease;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .radio-input {
+            clip: rect(0 0 0 0);
+            clip-path: inset(100%);
+            height: 1px;
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
+        }
+
+        /* Estilos para la pestaña flotante */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .summary-button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            outline: none;
+        }
+
+        .summary-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .summary-button:active {
+            background-color: #2471a3;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            transform: scale(0.98);
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .summary-table, th, td {
+            border: 1px solid #dee2e6;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        td {
+            background-color: #f8f9fa;
+        }
+
+        .summary-container {
+            position: center;
+            margin-top: 10px;
+            top: 10px;
+            right: 20px;
+            width: 1500px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .summary-container h2 {
+            margin: 0 0 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .summary-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="summary-container">
+        <h2>Resumen de Buses Sin Tarjeta</h2>
+        <table class="summary-table1">
+            <thead>
+                <tr>
+                    <th>INTERNO</th>
+                    <th>PPU</th>
+                    <th>LITROS</th>
+                    <th>FECHA</th>
+                    <th>HORA</th>
+                    <th>SURTIDOR</th>
+                    <th>MOTIVO DEL REGISTRO</th>
+                    <th>TURNO</th>
+                    <th>SUPERVISOR</th>
+                    <th>FECHA DE ENVIO</th>
+                </tr>
+            </thead>
+            <tbody id="summary-table1-body"></tbody>
+        </table>
+    </aside>
+    <div id="app" class="container">
+        <h1>Petrol App</h1>
+       
+        <div class="radio-inputs">
+            <label>
+                <input class="radio-input" type="radio" name="vehicleType" value="Bus" checked onchange="handleVehicleTypeChange(this.value)">
+                <span class="radio-tile">
+                    <span class="radio-icon">🚍</span>
+                    <span class="radio-label">Bus</span>
+                </span>
+            </label>
+            <label>
+                <input class="radio-input" type="radio" name="vehicleType" value="Movil" onchange="handleVehicleTypeChange(this.value)">
+                <span class="radio-tile">
+                    <span class="radio-icon">🚗</span>
+                    <span class="radio-label">Movil</span>
+                </span>
+            </label>
+        </div>
+        <form id="petrol-form">
+            <div>
+                <label for="INTERNO">INTERNO</label>
+                <input type="text" id="INTERNO" name="INTERNO" placeholder="INTERNO" required oninput="autoFillPPU()">
+            </div>
+            <div>
+                <label for="PPU">PPU</label>
+                <input type="text" id="PPU" name="PPU" placeholder="PPU" required>
+            </div>
+            <div>
+                <label for="SURTIDOR">SURTIDOR</label>
+                <select id="SURTIDOR" name="SURTIDOR" required>
+                    <option value="" disabled selected>Seleccione un surtidor</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+            <div>
+                <label for="LITROS">LITROS</label>
+                <input type="text" id="LITROS" name="LITROS" placeholder="LITROS" required>
+            </div>
+            <div>
+                <label for="TAPA">TAPA</label>
+                <select id="TAPA" name="TAPA" required>
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    <option value="SIN TAPA">SIN TAPA</option>
+                    <option value="CON TAPA">CON TAPA</option>
+                </select>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" id="ADBLUE_CHECK" onclick="toggleAdBlueInput()">
+                    <span>AdBlue</span>
+                </label>
+                <input type="text" id="ADBLUE" name="ADBLUE" placeholder="Cantidad de AdBlue" disabled>
+            </div>
+            <div class="actions">
+                <button type="button" class="search" onclick="searchData()">Buscar</button>
+                <button type="button" class="modify" onclick="modifyData()">Modificar</button>
+                <button type="button" class="add" onclick="addData()">Agregar</button>
+                <button type="button" class="clear" onclick="handleClear()">Limpiar</button>
+            </div>
+        </form>
+        <br><br><br>
+        <button class="summary-button" onclick="showSummary()">OBTENER RESUMEN</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>INTERNO</th>
+                    <th>PPU</th>
+                    <th>SURTIDOR</th>
+                    <th>LITROS</th>
+                    <th>TAPA</th>
+                </tr>
+            </thead>
+            <tbody id="data-table"></tbody>
+        </table>
+    </div>
+    <div id="alert" class="alert"></div>
+    
+    <!-- Modal -->
+    <div id="summaryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSummary()">&times;</span>
+            <h2>Resumen de Buses Sin Petroleo 🚍</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>INTERNO</th>
+                        <th>PPU</th>
+                        <th>ESTADO</th>
+                        <th>LITROS</th>
+                    </tr>
+                </thead>
+                <tbody id="summary-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+        const API_KEY = 'AIzaSyCyVG9n1lH7sfiSF2ABW6q5Q00xLVkXDgI';
+        const CLIENT_ID = '185859829591-k1bspc3ksrha9pe2o7lmh5gv8q987a2m.apps.googleusercontent.com';
+        const SPREADSHEET_ID = '1_-TUGgEMt6Wg37dB7o8Zlav-6dTT1c-LEw8FhcGTfzQ';
+        let tokenClient;
+        let gapiInited = false;
+        let gisInited = false;
+        let isAuthenticated = false;
+        let dataCache = [];
+        let rowIndex = -1;
+        let dbCache = [];
+
+        document.getElementById('petrol-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                INTERNO: formData.get('INTERNO'),
+                PPU: formData.get('PPU'),
+                SURTIDOR: formData.get('SURTIDOR'),
+                LITROS: formData.get('LITROS'),
+                TAPA: formData.get('TAPA'),
+                ADBLUE: document.getElementById('ADBLUE').value || ''  // AdBlue value
+            };
+            if (rowIndex === -1) {
+                addDataToSheet(data);
+            } else {
+                modifySheetData(data);
+            }
+        });
+
+        function handleClear() {
+            document.getElementById('petrol-form').reset();
+            document.getElementById('INTERNO').focus();
+            rowIndex = -1;
+        }
+
+        function gapiLoaded() {
+            gapi.load('client', initializeGapiClient);
+        }
+
+        async function initializeGapiClient() {
+            try {
+                await gapi.client.init({
+                    apiKey: API_KEY,
+                    discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+                });
+                gapiInited = true;
+                maybeEnableButtons();
+            } catch (error) {
+                showAlert('Error initializing GAPI client', true);
+                console.error('Error initializing GAPI client:', error);
+            }
+        }
+
+        function gisLoaded() {
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: 'https://www.googleapis.com/auth/spreadsheets',
+                callback: '', 
+            });
+            gisInited = true;
+            maybeEnableButtons();
+        }
+
+        function maybeEnableButtons() {
+            if (gapiInited && gisInited && !isAuthenticated) {
+                const token = localStorage.getItem('google_api_token');
+                if (token) {
+                    gapi.client.setToken({access_token: token});
+                    validateToken();
+                } else {
+                    requestAccessToken();
+                }
+            } else if (isAuthenticated) {
+                fetchData();
+                fetchDbData();
+                fetchSummaryTable(); // Fetch summary data after authentication
+            }
+        }
+
+        async function validateToken() {
+            try {
+                const tokenInfo = await gapi.client.oauth2.tokeninfo({ access_token: gapi.client.getToken().access_token });
+                if (tokenInfo.error) {
+                    requestAccessToken();
+                } else {
+                    isAuthenticated = true;
+                    fetchData();
+                    fetchDbData();
+                    fetchSummaryTable(); // Fetch summary data after authentication
+                }
+            } catch (error) {
+                requestAccessToken();
+                console.error('Error validating token:', error);
+            }
+        }
+
+        function requestAccessToken() {
+            tokenClient.callback = async (resp) => {
+                if (resp.error !== undefined) {
+                    showAlert('Error during token callback', true);
+                    console.error('Error during token callback:', resp);
+                    throw (resp);
+                }
+                localStorage.setItem('google_api_token', resp.access_token);
+                gapi.client.setToken({access_token: resp.access_token});
+                isAuthenticated = true;
+                await fetchData();
+                await fetchDbData();
+                fetchSummaryTable(); // Fetch summary data after authentication
+            };
+            tokenClient.requestAccessToken();
+        }
+
+        async function fetchData() {
+            try {
+                const vehicleType = document.querySelector('input[name="vehicleType"]:checked').value;
+                const range = vehicleType === 'Bus' ? 'PETROLEO!A2:H' : 'PETROLEO!K2:Q';
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: range,
+                });
+                dataCache = response.result.values || [];
+                const table = document.getElementById('data-table');
+                table.innerHTML = '';
+                dataCache.forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    tr.dataset.index = index;
+                    tr.onclick = () => loadRowData(index);
+                    row.slice(0, 5).forEach(cell => {
+                        const td = document.createElement('td');
+                        td.textContent = cell;
+                        tr.appendChild(td);
+                    });
+                    table.appendChild(tr);
+                });
+            } catch (error) {
+                showAlert('Error al obtener datos', true);
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        async function fetchDbData() {
+            try {
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'DB!A:B',
+                });
+                dbCache = response.result.values || [];
+            } catch (error) {
+                showAlert('Error al obtener datos de la base de datos', true);
+                console.error('Error fetching DB data:', error);
+            }
+        }
+
+        async function addDataToSheet(data) {
+            const vehicleType = document.querySelector('input[name="vehicleType"]:checked').value;
+            const date = new Date();
+            const formattedDate = date.toLocaleDateString('es-ES');
+            const formattedTime = date.toLocaleTimeString('es-ES');
+            try {
+                const lastRowRange = vehicleType === 'Bus' ? 'PETROLEO!A2:B' : 'PETROLEO!K2:K';
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: lastRowRange,
+                });
+                const lastRow = (response.result.values || []).length + 2;
+                const insertRange = vehicleType === 'Bus' ? `PETROLEO!A${lastRow}:H${lastRow}` : `PETROLEO!K${lastRow}:Q${lastRow}`;
+                const values = vehicleType === 'Bus'
+                    ? [[data.INTERNO, data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, formattedDate, formattedTime, data.ADBLUE]]
+                    : [['S/D', data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, formattedDate, formattedTime, data.ADBLUE]];
+
+                await gapi.client.sheets.spreadsheets.values.append({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: insertRange,
+                    valueInputOption: 'USER_ENTERED',
+                    resource: {
+                        values: values
+                    }
+                });
+                fetchData();
+                handleClear();
+                showAlert('Datos agregados correctamente');
+            } catch (error) {
+                showAlert('Error al agregar datos', true);
+                console.error('Error adding data:', error);
+            }
+        }
+
+        async function modifySheetData(data) {
+            const vehicleType = document.querySelector('input[name="vehicleType"]:checked').value;
+            const range = vehicleType === 'Bus' ? `PETROLEO!A${rowIndex + 2}:H${rowIndex + 2}` : `PETROLEO!K${rowIndex + 2}:Q${rowIndex + 2}`;
+            const date = new Date();
+            const formattedDate = date.toLocaleDateString('es-ES');
+            const formattedTime = date.toLocaleTimeString('es-ES');
+            try {
+                const values = vehicleType === 'Bus'
+                    ? [[data.INTERNO, data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, formattedDate, formattedTime, data.ADBLUE]]
+                    : [['S/D', data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, formattedDate, formattedTime, data.ADBLUE]];
+
+                await gapi.client.sheets.spreadsheets.values.update({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: range,
+                    valueInputOption: 'USER_ENTERED',
+                    resource: {
+                        values: values
+                    }
+                });
+                fetchData();
+                handleClear();
+                showAlert('Datos modificados correctamente');
+            } catch (error) {
+                showAlert('Error al modificar datos', true);
+                console.error('Error modifying data:', error);
+            }
+        }
+
+        function loadRowData(index) {
+            const row = dataCache[index];
+            document.getElementById('INTERNO').value = row[0];
+            document.getElementById('PPU').value = row[1];
+            document.getElementById('SURTIDOR').value = row[2];
+            document.getElementById('LITROS').value = row[3];
+            document.getElementById('TAPA').value = row[4];
+            document.getElementById('ADBLUE').value = row[7] || '';  // Load AdBlue value
+            rowIndex = index;
+        }
+
+        function showAlert(message, isError = false) {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = message;
+            alertBox.className = isError ? 'alert error show' : 'alert show';
+            setTimeout(() => {
+                alertBox.className = 'alert';
+            }, 3000);
+        }
+
+        function autoFillPPU() {
+            const interno = document.getElementById('INTERNO').value;
+            const ppuField = document.getElementById('PPU');
+            const dbRecord = dbCache.find(record => record[0] === interno);
+            if (dbRecord) {
+                ppuField.value = dbRecord[1];
+            } else {
+                ppuField.value = '';
+            }
+            validateInput(ppuField);
+        }
+
+        function validateInput(input) {
+            if (input.value) {
+                input.classList.add('valid');
+                input.classList.remove('invalid');
+            } else {
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+            }
+        }
+
+        function validateSelect(select) {
+            if (select.value) {
+                select.classList.add('valid');
+                select.classList.remove('invalid');
+            } else {
+                select.classList.add('invalid');
+                select.classList.remove('valid');
+            }
+        }
+
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('input', () => validateInput(element));
+            element.addEventListener('change', () => validateSelect(element));
+        });
+
+        function handleVehicleTypeChange(value) {
+            const internoField = document.getElementById('INTERNO');
+            if (value === 'Movil') {
+                internoField.value = 'S/D';
+                internoField.disabled = true;
+            } else {
+                internoField.value = '';
+                internoField.disabled = false;
+            }
+            fetchData();
+        }
+
+        async function searchData() {
+            const interno = document.getElementById('INTERNO').value;
+            if (!interno) {
+                showAlert('Ingrese un número interno para buscar', true);
+                return;
+            }
+            const index = dataCache.findIndex(row => row[0] === interno);
+            if (index !== -1) {
+                loadRowData(index);
+                showAlert('Datos encontrados y cargados');
+            } else {
+                showAlert('No se encontraron datos', true);
+            }
+        }
+
+        function addData() {
+            rowIndex = -1;
+            const formData = new FormData(document.getElementById('petrol-form'));
+            const data = {
+                INTERNO: formData.get('INTERNO'),
+                PPU: formData.get('PPU'),
+                SURTIDOR: formData.get('SURTIDOR'),
+                LITROS: formData.get('LITROS'),
+                TAPA: formData.get('TAPA'),
+                ADBLUE: formData.get('ADBLUE')
+            };
+            addDataToSheet(data);
+        }
+
+        function modifyData() {
+            const formData = new FormData(document.getElementById('petrol-form'));
+            const data = {
+                INTERNO: formData.get('INTERNO'),
+                PPU: formData.get('PPU'),
+                SURTIDOR: formData.get('SURTIDOR'),
+                LITROS: formData.get('LITROS'),
+                TAPA: formData.get('TAPA'),
+                ADBLUE: formData.get('ADBLUE')
+            };
+            modifySheetData(data);
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+    gapiLoaded();
+    gisLoaded();
+    // fetchSummaryTable(); // No llamamos aquí
+});
+
+
+
+async function showSummary() {
+    try {
+        const response = await gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: SPREADSHEET_ID,
+            range: 'RESUMEN!B2:E153',
+        });
+        const summaryData = response.result.values || [];
+        const tableBody = document.getElementById('summary-table-body');
+        tableBody.innerHTML = '';
+        summaryData.forEach(row => {
+            if (row[3] === 'S/P') {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            }
+        });
+        document.getElementById('summaryModal').style.display = 'block';
+        toggleSummaryContainer(true);
+    } catch (error) {
+        showAlert('Error al obtener resumen', true);
+        console.error('Error fetching summary data:', error);
+    }
+}
+
+function closeSummary() {
+    document.getElementById('summaryModal').style.display = 'none';
+    toggleSummaryContainer(false);
+}
+
+function toggleSummaryContainer(hide) {
+    const summaryContainer = document.querySelector('.summary-container');
+    summaryContainer.style.display = hide ? 'none' : 'block';
+}
+
+document.querySelector('.close').addEventListener('click', closeSummary);
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    gapiLoaded();
+    gisLoaded();
+    fetchSummaryTable();
+});
+
+
+
+// Llama a fetchSummaryTable solo cuando realmente necesites actualizar esa tabla
+async function fetchSummaryTable() {
+    try {
+        const response = await gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: SPREADSHEET_ID,
+            range: 'RESUMEN!H3:Q',
+        });
+        const summaryData = response.result.values || [];
+        const tableBody = document.getElementById('summary-table1-body');
+        tableBody.innerHTML = '';
+        summaryData.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+                const td = document.createElement('td');
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+            tableBody.appendChild(tr);
+        });
+    } catch (error) {
+        console.error('Error fetching summary table data:', error);
+        showAlert('Error al obtener datos del resumen', true);
+    }
+}
+
+        function toggleAdBlueInput() {
+            const adBlueInput = document.getElementById('ADBLUE');
+            adBlueInput.disabled = !document.getElementById('ADBLUE_CHECK').checked;
+            if (!adBlueInput.disabled) {
+                adBlueInput.focus();
+            } else {
+                adBlueInput.value = '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            gapiLoaded();
+            gisLoaded();
+        });
+    </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>
