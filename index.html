@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +51,9 @@
             flex-direction: column;
         }
 
-        form input, form select, form button {
+        form input,
+        form select,
+        form button {
             padding: 12px;
             font-size: 16px;
             border: 1px solid #ced4da;
@@ -60,7 +63,9 @@
             margin-top: 5px;
         }
 
-        form input:focus, form select:focus, form button:focus {
+        form input:focus,
+        form select:focus,
+        form button:focus {
             border-color: #80bdff;
             outline: none;
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
@@ -82,30 +87,57 @@
             transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .actions button.add { background-color: #28a745; color: white; }
-        .actions button.add:hover { background-color: #218838; }
+        .actions button.add {
+            background-color: #28a745;
+            color: white;
+        }
 
-        .actions button.search { background-color: #17a2b8; color: white; }
-        .actions button.search:hover { background-color: #138496; }
+        .actions button.add:hover {
+            background-color: #218838;
+        }
 
-        .actions button.modify { background-color: #ffc107; color: white; }
-        .actions button.modify:hover { background-color: #e0a800; }
+        .actions button.search {
+            background-color: #17a2b8;
+            color: white;
+        }
 
-        .actions button.clear { background-color: #dc3545; color: white; }
-        .actions button.clear:hover { background-color: #c82333; }
+        .actions button.search:hover {
+            background-color: #138496;
+        }
+
+        .actions button.modify {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        .actions button.modify:hover {
+            background-color: #e0a800;
+        }
+
+        .actions button.clear {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .actions button.clear:hover {
+            background-color: #c82333;
+        }
 
         table {
             width: 100%;
-            font-size: 10px;
             border-collapse: collapse;
+            font-size: 9px;
             margin-top: 20px;
         }
 
-        table, th, td {
+        table,
+        th,
+        td {
             border: 1px solid #dee2e6;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
         }
@@ -153,37 +185,37 @@
             user-select: none;
         }
 
-        .radio-inputs > * {
+        .radio-inputs>* {
             margin: 6px;
         }
 
-        .radio-input:checked + .radio-tile {
+        .radio-input:checked+.radio-tile {
             border-color: #2260ff;
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
             color: #2260ff;
         }
 
-        .radio-input:checked + .radio-tile:before {
+        .radio-input:checked+.radio-tile:before {
             transform: scale(1);
             opacity: 1;
             background-color: #2260ff;
             border-color: #2260ff;
         }
 
-        .radio-input:checked + .radio-tile .radio-icon svg {
+        .radio-input:checked+.radio-tile .radio-icon svg {
             fill: #2260ff;
         }
 
-        .radio-input:checked + .radio-tile .radio-label {
+        .radio-input:checked+.radio-tile .radio-label {
             color: #2260ff;
         }
 
-        .radio-input:focus + .radio-tile {
+        .radio-input:focus+.radio-tile {
             border-color: #2260ff;
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
         }
 
-        .radio-input:focus + .radio-tile:before {
+        .radio-input:focus+.radio-tile:before {
             transform: scale(1);
             opacity: 1;
         }
@@ -262,8 +294,8 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
         }
 
@@ -275,7 +307,7 @@
             width: 80%;
             max-width: 600px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .close {
@@ -302,7 +334,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             outline: none;
         }
 
@@ -313,7 +345,7 @@
 
         .summary-button:active {
             background-color: #2471a3;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
             transform: scale(0.98);
         }
 
@@ -323,11 +355,14 @@
             margin-top: 20px;
         }
 
-        .summary-table, th, td {
+        .summary-table,
+        th,
+        td {
             border: 1px solid #dee2e6;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
         }
@@ -367,6 +402,7 @@
         }
     </style>
 </head>
+
 <body>
     <aside class="summary-container">
         <h2>Resumen de Buses Sin Tarjeta</h2>
@@ -390,17 +426,19 @@
     </aside>
     <div id="app" class="container">
         <h1>Petrol App</h1>
-       
+
         <div class="radio-inputs">
             <label>
-                <input class="radio-input" type="radio" name="vehicleType" value="Bus" checked onchange="handleVehicleTypeChange(this.value)">
+                <input class="radio-input" type="radio" name="vehicleType" value="Bus" checked
+                    onchange="handleVehicleTypeChange(this.value)">
                 <span class="radio-tile">
                     <span class="radio-icon">🚍</span>
                     <span class="radio-label">Bus</span>
                 </span>
             </label>
             <label>
-                <input class="radio-input" type="radio" name="vehicleType" value="Movil" onchange="handleVehicleTypeChange(this.value)">
+                <input class="radio-input" type="radio" name="vehicleType" value="Movil"
+                    onchange="handleVehicleTypeChange(this.value)">
                 <span class="radio-tile">
                     <span class="radio-icon">🚗</span>
                     <span class="radio-label">Movil</span>
@@ -468,7 +506,7 @@
         </table>
     </div>
     <div id="alert" class="alert"></div>
-    
+
     <!-- Modal -->
     <div id="summaryModal" class="modal">
         <div class="modal-content">
@@ -489,8 +527,9 @@
     </div>
 
     <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-        const API_KEY = 'AIzaSyCyVG9n1lH7sfiSF2ABW6q5Q00xLVkXDgI';
+        const API_KEY = 'AIzaSyCyVG9n1lH7sfiSF2ABW6q5Q00xLVkXDgI'; 
         const CLIENT_ID = '185859829591-k1bspc3ksrha9pe2o7lmh5gv8q987a2m.apps.googleusercontent.com';
         const SPREADSHEET_ID = '1_-TUGgEMt6Wg37dB7o8Zlav-6dTT1c-LEw8FhcGTfzQ';
         let tokenClient;
@@ -500,30 +539,6 @@
         let dataCache = [];
         let rowIndex = -1;
         let dbCache = [];
-
-        document.getElementById('petrol-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = {
-                INTERNO: formData.get('INTERNO'),
-                PPU: formData.get('PPU'),
-                SURTIDOR: formData.get('SURTIDOR'),
-                LITROS: formData.get('LITROS'),
-                TAPA: formData.get('TAPA'),
-                ADBLUE: document.getElementById('ADBLUE').value || ''  // AdBlue value
-            };
-            if (rowIndex === -1) {
-                addDataToSheet(data);
-            } else {
-                modifySheetData(data);
-            }
-        });
-
-        function handleClear() {
-            document.getElementById('petrol-form').reset();
-            document.getElementById('INTERNO').focus();
-            rowIndex = -1;
-        }
 
         function gapiLoaded() {
             gapi.load('client', initializeGapiClient);
@@ -547,7 +562,7 @@
             tokenClient = google.accounts.oauth2.initTokenClient({
                 client_id: CLIENT_ID,
                 scope: 'https://www.googleapis.com/auth/spreadsheets',
-                callback: '', 
+                callback: '',
             });
             gisInited = true;
             maybeEnableButtons();
@@ -557,7 +572,7 @@
             if (gapiInited && gisInited && !isAuthenticated) {
                 const token = localStorage.getItem('google_api_token');
                 if (token) {
-                    gapi.client.setToken({access_token: token});
+                    gapi.client.setToken({ access_token: token });
                     validateToken();
                 } else {
                     requestAccessToken();
@@ -565,7 +580,6 @@
             } else if (isAuthenticated) {
                 fetchData();
                 fetchDbData();
-                fetchSummaryTable(); // Fetch summary data after authentication
             }
         }
 
@@ -578,7 +592,6 @@
                     isAuthenticated = true;
                     fetchData();
                     fetchDbData();
-                    fetchSummaryTable(); // Fetch summary data after authentication
                 }
             } catch (error) {
                 requestAccessToken();
@@ -594,13 +607,42 @@
                     throw (resp);
                 }
                 localStorage.setItem('google_api_token', resp.access_token);
-                gapi.client.setToken({access_token: resp.access_token});
+                gapi.client.setToken({ access_token: resp.access_token });
                 isAuthenticated = true;
                 await fetchData();
                 await fetchDbData();
-                fetchSummaryTable(); // Fetch summary data after authentication
             };
             tokenClient.requestAccessToken();
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            gapiLoaded();
+            gisLoaded();
+            fetchSummaryTable();
+        });
+
+        document.getElementById('petrol-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                INTERNO: formData.get('INTERNO'),
+                PPU: formData.get('PPU'),
+                SURTIDOR: formData.get('SURTIDOR'),
+                LITROS: formData.get('LITROS'),
+                TAPA: formData.get('TAPA'),
+                ADBLUE: document.getElementById('ADBLUE').value || ''  // AdBlue value
+            };
+            if (rowIndex === -1) {
+                addDataToSheet(data);
+            } else {
+                modifySheetData(data);
+            }
+        });
+
+        function handleClear() {
+            document.getElementById('petrol-form').reset();
+            document.getElementById('INTERNO').focus();
+            rowIndex = -1;
         }
 
         async function fetchData() {
@@ -817,86 +859,62 @@
             modifySheetData(data);
         }
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-    gapiLoaded();
-    gisLoaded();
-    // fetchSummaryTable(); // No llamamos aquí
-});
-
-
-
-async function showSummary() {
-    try {
-        const response = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: SPREADSHEET_ID,
-            range: 'RESUMEN!B2:E153',
-        });
-        const summaryData = response.result.values || [];
-        const tableBody = document.getElementById('summary-table-body');
-        tableBody.innerHTML = '';
-        summaryData.forEach(row => {
-            if (row[3] === 'S/P') {
-                const tr = document.createElement('tr');
-                row.forEach(cell => {
-                    const td = document.createElement('td');
-                    td.textContent = cell;
-                    tr.appendChild(td);
+        async function showSummary() {
+            try {
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'RESUMEN!B2:E153',
                 });
-                tableBody.appendChild(tr);
+                const summaryData = response.result.values || [];
+                const tableBody = document.getElementById('summary-table-body');
+                tableBody.innerHTML = '';
+                summaryData.forEach(row => {
+                    if (row[3] === 'S/P') {
+                        const tr = document.createElement('tr');
+                        row.forEach(cell => {
+                            const td = document.createElement('td');
+                            td.textContent = cell;
+                            tr.appendChild(td);
+                        });
+                        tableBody.appendChild(tr);
+                    }
+                });
+                document.getElementById('summaryModal').style.display = 'block';
+                document.querySelector('.summary-container').style.display = 'none';  // Ocultar summary-container cuando se muestra el resumen
+            } catch (error) {
+                showAlert('Error al obtener resumen', true);
+                console.error('Error fetching summary data:', error);
             }
-        });
-        document.getElementById('summaryModal').style.display = 'block';
-        toggleSummaryContainer(true);
-    } catch (error) {
-        showAlert('Error al obtener resumen', true);
-        console.error('Error fetching summary data:', error);
-    }
-}
+        }
 
-function closeSummary() {
-    document.getElementById('summaryModal').style.display = 'none';
-    toggleSummaryContainer(false);
-}
+        function closeSummary() {
+            document.getElementById('summaryModal').style.display = 'none';
+            document.querySelector('.summary-container').style.display = 'block';  // Mostrar summary-container cuando se cierra el resumen
+        }
 
-function toggleSummaryContainer(hide) {
-    const summaryContainer = document.querySelector('.summary-container');
-    summaryContainer.style.display = hide ? 'none' : 'block';
-}
-
-document.querySelector('.close').addEventListener('click', closeSummary);
-
-document.addEventListener('DOMContentLoaded', (event) => {
-    gapiLoaded();
-    gisLoaded();
-    fetchSummaryTable();
-});
-
-
-
-// Llama a fetchSummaryTable solo cuando realmente necesites actualizar esa tabla
-async function fetchSummaryTable() {
-    try {
-        const response = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: SPREADSHEET_ID,
-            range: 'RESUMEN!H3:Q',
-        });
-        const summaryData = response.result.values || [];
-        const tableBody = document.getElementById('summary-table1-body');
-        tableBody.innerHTML = '';
-        summaryData.forEach(row => {
-            const tr = document.createElement('tr');
-            row.forEach(cell => {
-                const td = document.createElement('td');
-                td.textContent = cell;
-                tr.appendChild(td);
-            });
-            tableBody.appendChild(tr);
-        });
-    } catch (error) {
-        console.error('Error fetching summary table data:', error);
-        showAlert('Error al obtener datos del resumen', true);
-    }
-}
+        async function fetchSummaryTable() {
+            try {
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'RESUMEN!H3:Q',
+                });
+                const summaryData = response.result.values || [];
+                const tableBody = document.getElementById('summary-table1-body');
+                tableBody.innerHTML = '';
+                summaryData.forEach(row => {
+                    const tr = document.createElement('tr');
+                    row.forEach(cell => {
+                        const td = document.createElement('td');
+                        td.textContent = cell;
+                        tr.appendChild(td);
+                    });
+                    tableBody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error fetching summary table data:', error);
+                showAlert('Error al obtener datos del resumen', true);
+            }
+        }
 
         function toggleAdBlueInput() {
             const adBlueInput = document.getElementById('ADBLUE');
@@ -908,11 +926,7 @@ async function fetchSummaryTable() {
             }
         }
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            gapiLoaded();
-            gisLoaded();
-        });
     </script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
+
 </html>
