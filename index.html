@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -410,6 +411,19 @@
             margin: 0 auto;
         }
 
+        #login-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: none;
+            padding: 5px 10px;
+            font-size: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
         @media (max-width: 768px) {
             .summary-container {
@@ -453,30 +467,15 @@
                 padding: 8px 16px;
                 font-size: 14px;
             }
-        }
 
-        .login-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 12px;
-            font-size: 12px;
-            cursor: pointer;
+            #login-button {
+                display: block;
+            }
         }
-
-        .login-button:hover {
-            background-color: #45a049;
-        }
-
     </style>
 </head>
 
 <body>
-    
     <aside class="summary-container">
         <h2>Resumen de Buses Sin Tarjeta</h2>
         <table class="summary-table1">
@@ -498,9 +497,8 @@
         </table>
     </aside>
     <div id="app" class="container">
-        
         <h1>Petrol App</h1>
-        <button class="login-button" id="login-button">INICIAR</button>
+        <button id="login-button" onclick="requestAccessToken()">Iniciar sesión</button>
         <div class="radio-inputs">
             <label>
                 <input class="radio-input" type="radio" name="vehicleType" value="Bus" checked
@@ -559,7 +557,6 @@
             </div>
             <div class="actions">
                 <button type="button" class="search" onclick="searchData()">Buscar</button>
-
                 <button type="button" class="add" onclick="addData()">Agregar</button>
                 <button type="button" class="clear" onclick="handleClear()">Limpiar</button>
             </div>
@@ -931,12 +928,6 @@
             modifySheetData(data);
         }
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            gapiLoaded();
-            gisLoaded();
-            fetchSummaryTable(); // Fetch summary data after authentication
-        });
-
         async function showSummary() {
             try {
                 const response = await gapi.client.sheets.spreadsheets.values.get({
@@ -1011,14 +1002,14 @@
             }
         }
 
-        document.getElementById('login-button').addEventListener('click', requestAccessToken);
-
         document.addEventListener('DOMContentLoaded', (event) => {
             gapiLoaded();
             gisLoaded();
+            fetchSummaryTable();
         });
     </script>
 </body>
 
 </html>
+
 
