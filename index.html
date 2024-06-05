@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -411,18 +410,34 @@
             margin: 0 auto;
         }
 
-        #login-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        .login-button {
             display: none;
-            padding: 5px 10px;
-            font-size: 12px;
-            background-color: #007bff;
+            background-color: #4285f4;
             color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            outline: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .login-button:hover {
+            background-color: #3367d6;
+            transform: scale(1.05);
+        }
+
+        .login-button:active {
+            background-color: #3367d6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            transform: scale(0.98);
         }
 
         @media (max-width: 768px) {
@@ -468,7 +483,7 @@
                 font-size: 14px;
             }
 
-            #login-button {
+            .login-button {
                 display: block;
             }
         }
@@ -498,7 +513,7 @@
     </aside>
     <div id="app" class="container">
         <h1>Petrol App</h1>
-        <button id="login-button" onclick="requestAccessToken()">Iniciar sesión</button>
+
         <div class="radio-inputs">
             <label>
                 <input class="radio-input" type="radio" name="vehicleType" value="Bus" checked
@@ -557,6 +572,7 @@
             </div>
             <div class="actions">
                 <button type="button" class="search" onclick="searchData()">Buscar</button>
+
                 <button type="button" class="add" onclick="addData()">Agregar</button>
                 <button type="button" class="clear" onclick="handleClear()">Limpiar</button>
             </div>
@@ -598,10 +614,12 @@
         </div>
     </div>
 
+    <button class="login-button" id="login-button" onclick="requestAccessToken()">Iniciar Sesión</button>
+
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-        const API_KEY = 'AIzaSyCyVG9n1lH7sfiSF2ABW6q5Q00xLVkXDgI';
+       const API_KEY = 'AIzaSyCyVG9n1lH7sfiSF2ABW6q5Q00xLVkXDgI';
         const CLIENT_ID = '185859829591-k1bspc3ksrha9pe2o7lmh5gv8q987a2m.apps.googleusercontent.com';
         const SPREADSHEET_ID = '1_-TUGgEMt6Wg37dB7o8Zlav-6dTT1c-LEw8FhcGTfzQ';
         let tokenClient;
@@ -671,12 +689,12 @@
                     gapi.client.setToken({ access_token: token });
                     validateToken();
                 } else {
-                    requestAccessToken();
+                    document.getElementById('login-button').style.display = 'block';
                 }
             } else if (isAuthenticated) {
                 fetchData();
                 fetchDbData();
-                fetchSummaryTable(); // Fetch summary data after authentication
+                fetchSummaryTable();
             }
         }
 
@@ -689,7 +707,7 @@
                     isAuthenticated = true;
                     fetchData();
                     fetchDbData();
-                    fetchSummaryTable(); // Fetch summary data after authentication
+                    fetchSummaryTable();
                 }
             } catch (error) {
                 requestAccessToken();
@@ -707,9 +725,10 @@
                 localStorage.setItem('google_api_token', resp.access_token);
                 gapi.client.setToken({ access_token: resp.access_token });
                 isAuthenticated = true;
+                document.getElementById('login-button').style.display = 'none';
                 await fetchData();
                 await fetchDbData();
-                fetchSummaryTable(); // Fetch summary data after authentication
+                fetchSummaryTable();
             };
             tokenClient.requestAccessToken();
         }
@@ -928,6 +947,12 @@
             modifySheetData(data);
         }
 
+        document.addEventListener('DOMContentLoaded', (event) => {
+            gapiLoaded();
+            gisLoaded();
+            fetchSummaryTable(); // Fetch summary data after authentication
+        });
+
         async function showSummary() {
             try {
                 const response = await gapi.client.sheets.spreadsheets.values.get({
@@ -1005,11 +1030,9 @@
         document.addEventListener('DOMContentLoaded', (event) => {
             gapiLoaded();
             gisLoaded();
-            fetchSummaryTable();
         });
     </script>
 </body>
 
 </html>
-
 
