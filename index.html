@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petrol App</title>
     <style>
-body {
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
             margin: 0;
@@ -454,10 +454,29 @@ body {
                 font-size: 14px;
             }
         }
+
+        .login-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background-color: #45a049;
+        }
+
     </style>
 </head>
 
 <body>
+    
     <aside class="summary-container">
         <h2>Resumen de Buses Sin Tarjeta</h2>
         <table class="summary-table1">
@@ -479,19 +498,21 @@ body {
         </table>
     </aside>
     <div id="app" class="container">
+        
         <h1>Petrol App</h1>
-        <button class="start-button" onclick="requestAccessToken()">INICIAR</button>
-
+        <button class="login-button" id="login-button">INICIAR</button>
         <div class="radio-inputs">
             <label>
-                <input class="radio-input" type="radio" name="vehicleType" value="Bus" checked onchange="handleVehicleTypeChange(this.value)">
+                <input class="radio-input" type="radio" name="vehicleType" value="Bus" checked
+                    onchange="handleVehicleTypeChange(this.value)">
                 <span class="radio-tile">
                     <span class="radio-icon">🚍</span>
                     <span class="radio-label">Bus</span>
                 </span>
             </label>
             <label>
-                <input class="radio-input" type="radio" name="vehicleType" value="Movil" onchange="handleVehicleTypeChange(this.value)">
+                <input class="radio-input" type="radio" name="vehicleType" value="Movil"
+                    onchange="handleVehicleTypeChange(this.value)">
                 <span class="radio-tile">
                     <span class="radio-icon">🚗</span>
                     <span class="radio-label">Movil</span>
@@ -538,13 +559,13 @@ body {
             </div>
             <div class="actions">
                 <button type="button" class="search" onclick="searchData()">Buscar</button>
+
                 <button type="button" class="add" onclick="addData()">Agregar</button>
                 <button type="button" class="clear" onclick="handleClear()">Limpiar</button>
             </div>
         </form>
         <br><br><br>
-        <button class="summary-button" onclick="showSummary()">OBTENER RESUMEN</button>
-        <br><br>
+        <button class="summary-button" onclick="showSummary()">OBTENER RESUMEN</button><br><br>
         <button type="button" class="modify" onclick="modifyData()">Modificar</button>
         <table>
             <thead>
@@ -989,6 +1010,13 @@ body {
                 adBlueInput.value = '';
             }
         }
+
+        document.getElementById('login-button').addEventListener('click', requestAccessToken);
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            gapiLoaded();
+            gisLoaded();
+        });
     </script>
 </body>
 
