@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petrol App</title>
     <style>
-        body {
+       body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
             margin: 0;
@@ -410,35 +411,6 @@
             margin: 0 auto;
         }
 
-        .login-button {
-            display: none;
-            background-color: #4285f4;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            outline: none;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .login-button:hover {
-            background-color: #3367d6;
-            transform: scale(1.05);
-        }
-
-        .login-button:active {
-            background-color: #3367d6;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-            transform: scale(0.98);
-        }
 
         @media (max-width: 768px) {
             .summary-container {
@@ -481,10 +453,6 @@
             .summary-button {
                 padding: 8px 16px;
                 font-size: 14px;
-            }
-
-            .login-button {
-                display: block;
             }
         }
     </style>
@@ -535,7 +503,7 @@
         <form id="petrol-form">
             <div>
                 <label for="INTERNO">INTERNO</label>
-                <input type="text" id="INTERNO" name="INTERNO" placeholder="INTERNO" required oninput="autoFillPPU()">
+                <input type="number" id="INTERNO" name="INTERNO" placeholder="INTERNO" required oninput="autoFillPPU()">
             </div>
             <div>
                 <label for="PPU">PPU</label>
@@ -553,14 +521,22 @@
             </div>
             <div>
                 <label for="LITROS">LITROS</label>
-                <input type="text" id="LITROS" name="LITROS" placeholder="LITROS" required>
+                <input type="number" id="LITROS" name="LITROS" placeholder="LITROS" required>
             </div>
             <div>
                 <label for="TAPA">TAPA</label>
                 <select id="TAPA" name="TAPA" required>
                     <option value="" disabled selected>Seleccione una opción</option>
-                    <option value="SIN TAPA">SIN TAPA</option>
                     <option value="CON TAPA">CON TAPA</option>
+                    <option value="SIN TAPA">SIN TAPA</option>
+                </select>
+            </div>
+            <div>
+                <label for="CON_TARJETA">CON TARJETA</label>
+                <select id="CON_TARJETA" name="CON_TARJETA" required>
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    <option value="CON TARJETA">CON TARJETA</option>
+                    <option value="SIN TARJETA">SIN TARJETA</option>
                 </select>
             </div>
             <div>
@@ -568,11 +544,10 @@
                     <input type="checkbox" id="ADBLUE_CHECK" onclick="toggleAdBlueInput()">
                     <span>AdBlue</span>
                 </label>
-                <input type="text" id="ADBLUE" name="ADBLUE" placeholder="Cantidad de AdBlue" disabled>
+                <input type="number" id="ADBLUE" name="ADBLUE" placeholder="Cantidad de AdBlue" disabled>
             </div>
             <div class="actions">
                 <button type="button" class="search" onclick="searchData()">Buscar</button>
-
                 <button type="button" class="add" onclick="addData()">Agregar</button>
                 <button type="button" class="clear" onclick="handleClear()">Limpiar</button>
             </div>
@@ -588,6 +563,7 @@
                     <th>SURTIDOR</th>
                     <th>LITROS</th>
                     <th>TAPA</th>
+                    <th>CON TARJETA</th>
                 </tr>
             </thead>
             <tbody id="data-table"></tbody>
@@ -614,12 +590,10 @@
         </div>
     </div>
 
-    <button class="login-button" id="login-button" onclick="requestAccessToken()">Iniciar Sesión</button>
-
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-       const API_KEY = 'AIzaSyCyVG9n1lH7sfiSF2ABW6q5Q00xLVkXDgI';
+        const API_KEY = 'AIzaSyCyVG9n1lH7sfiSF2ABW6q5Q00xLVkXDgI';
         const CLIENT_ID = '185859829591-k1bspc3ksrha9pe2o7lmh5gv8q987a2m.apps.googleusercontent.com';
         const SPREADSHEET_ID = '1_-TUGgEMt6Wg37dB7o8Zlav-6dTT1c-LEw8FhcGTfzQ';
         let tokenClient;
@@ -639,6 +613,7 @@
                 SURTIDOR: formData.get('SURTIDOR'),
                 LITROS: formData.get('LITROS'),
                 TAPA: formData.get('TAPA'),
+                CON_TARJETA: formData.get('CON_TARJETA'),
                 ADBLUE: document.getElementById('ADBLUE').value || ''  // AdBlue value
             };
             if (rowIndex === -1) {
@@ -689,12 +664,12 @@
                     gapi.client.setToken({ access_token: token });
                     validateToken();
                 } else {
-                    document.getElementById('login-button').style.display = 'block';
+                    requestAccessToken();
                 }
             } else if (isAuthenticated) {
                 fetchData();
                 fetchDbData();
-                fetchSummaryTable();
+                fetchSummaryTable(); // Fetch summary data after authentication
             }
         }
 
@@ -707,7 +682,7 @@
                     isAuthenticated = true;
                     fetchData();
                     fetchDbData();
-                    fetchSummaryTable();
+                    fetchSummaryTable(); // Fetch summary data after authentication
                 }
             } catch (error) {
                 requestAccessToken();
@@ -725,10 +700,9 @@
                 localStorage.setItem('google_api_token', resp.access_token);
                 gapi.client.setToken({ access_token: resp.access_token });
                 isAuthenticated = true;
-                document.getElementById('login-button').style.display = 'none';
                 await fetchData();
                 await fetchDbData();
-                fetchSummaryTable();
+                fetchSummaryTable(); // Fetch summary data after authentication
             };
             tokenClient.requestAccessToken();
         }
@@ -736,7 +710,7 @@
         async function fetchData() {
             try {
                 const vehicleType = document.querySelector('input[name="vehicleType"]:checked').value;
-                const range = vehicleType === 'Bus' ? 'PETROLEO!A2:H' : 'PETROLEO!K2:Q';
+                const range = vehicleType === 'Bus' ? 'PETROLEO!A2:I' : 'PETROLEO!K2:S';
                 const response = await gapi.client.sheets.spreadsheets.values.get({
                     spreadsheetId: SPREADSHEET_ID,
                     range: range,
@@ -748,7 +722,7 @@
                     const tr = document.createElement('tr');
                     tr.dataset.index = index;
                     tr.onclick = () => loadRowData(index);
-                    row.slice(0, 5).forEach(cell => {
+                    row.slice(0, 6).forEach(cell => {
                         const td = document.createElement('td');
                         td.textContent = cell;
                         tr.appendChild(td);
@@ -786,10 +760,10 @@
                     range: lastRowRange,
                 });
                 const lastRow = (response.result.values || []).length + 2;
-                const insertRange = vehicleType === 'Bus' ? `PETROLEO!A${lastRow}:H${lastRow}` : `PETROLEO!K${lastRow}:Q${lastRow}`;
+                const insertRange = vehicleType === 'Bus' ? `PETROLEO!A${lastRow}:I${lastRow}` : `PETROLEO!K${lastRow}:S${lastRow}`;
                 const values = vehicleType === 'Bus'
-                    ? [[data.INTERNO, data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, formattedDate, formattedTime, data.ADBLUE]]
-                    : [['S/D', data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, formattedDate, formattedTime, data.ADBLUE]];
+                    ? [[data.INTERNO, data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, data.CON_TARJETA, formattedDate, formattedTime, data.ADBLUE]]
+                    : [['S/D', data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, data.CON_TARJETA, formattedDate, formattedTime, data.ADBLUE]];
 
                 await gapi.client.sheets.spreadsheets.values.append({
                     spreadsheetId: SPREADSHEET_ID,
@@ -810,14 +784,14 @@
 
         async function modifySheetData(data) {
             const vehicleType = document.querySelector('input[name="vehicleType"]:checked').value;
-            const range = vehicleType === 'Bus' ? `PETROLEO!A${rowIndex + 2}:H${rowIndex + 2}` : `PETROLEO!K${rowIndex + 2}:Q${rowIndex + 2}`;
+            const range = vehicleType === 'Bus' ? `PETROLEO!A${rowIndex + 2}:I${rowIndex + 2}` : `PETROLEO!K${rowIndex + 2}:S${rowIndex + 2}`;
             const date = new Date();
             const formattedDate = date.toLocaleDateString('es-ES');
             const formattedTime = date.toLocaleTimeString('es-ES');
             try {
                 const values = vehicleType === 'Bus'
-                    ? [[data.INTERNO, data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, formattedDate, formattedTime, data.ADBLUE]]
-                    : [['S/D', data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, formattedDate, formattedTime, data.ADBLUE]];
+                    ? [[data.INTERNO, data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, data.CON_TARJETA, formattedDate, formattedTime, data.ADBLUE]]
+                    : [['S/D', data.PPU, data.SURTIDOR, data.LITROS, data.TAPA, data.CON_TARJETA, formattedDate, formattedTime, data.ADBLUE]];
 
                 await gapi.client.sheets.spreadsheets.values.update({
                     spreadsheetId: SPREADSHEET_ID,
@@ -843,7 +817,8 @@
             document.getElementById('SURTIDOR').value = row[2];
             document.getElementById('LITROS').value = row[3];
             document.getElementById('TAPA').value = row[4];
-            document.getElementById('ADBLUE').value = row[7] || '';  // Load AdBlue value
+            document.getElementById('CON_TARJETA').value = row[5];
+            document.getElementById('ADBLUE').value = row[8] || '';  // Load AdBlue value
             rowIndex = index;
         }
 
@@ -929,6 +904,7 @@
                 SURTIDOR: formData.get('SURTIDOR'),
                 LITROS: formData.get('LITROS'),
                 TAPA: formData.get('TAPA'),
+                CON_TARJETA: formData.get('CON_TARJETA'),
                 ADBLUE: formData.get('ADBLUE')
             };
             addDataToSheet(data);
@@ -942,6 +918,7 @@
                 SURTIDOR: formData.get('SURTIDOR'),
                 LITROS: formData.get('LITROS'),
                 TAPA: formData.get('TAPA'),
+                CON_TARJETA: formData.get('CON_TARJETA'),
                 ADBLUE: formData.get('ADBLUE')
             };
             modifySheetData(data);
@@ -1035,4 +1012,3 @@
 </body>
 
 </html>
-
